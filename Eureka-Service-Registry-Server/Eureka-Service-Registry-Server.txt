@@ -1,0 +1,9 @@
+http://localhost:2222/
+http://saigiri:2222/
+
+com.springbootmicroservices
+
+Eureka service registry 
+EurekaServer
+
+eureka.client.service-url.defaultZone= http://localhost:8761/eureka/

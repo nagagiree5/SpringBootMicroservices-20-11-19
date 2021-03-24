@@ -1,0 +1,20 @@
+server:
+   port: 4003
+   servlet:
+        context-path: /Microservices2
+spring:
+  application:
+      name: Microservices-3
+  datasource:
+    url:      jdbc:oracle:thin:@localhost:1521/xe
+    username: giridb
+    password: giridb
+    driverClassName: oracle.jdbc.driver.OracleDriver
+  # Spring Data JPA configuration
+  jpa:
+    hibernate:
+      # To be updated in real production usage!
+      ddl-auto: update
+    show-sql: true
+    
+    

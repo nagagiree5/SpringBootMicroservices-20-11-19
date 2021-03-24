@@ -1,0 +1,21 @@
+zuul:
+    sslHostnameValidationEnabled: false
+    ignoredServices: "*"
+    routes:
+        customer-services:
+          path: /customer/**
+          serviceId: CUSTOMER-MICROSERVICE-4
+        friend-services:
+          path: /friends/**
+          serviceId: FRIENDINSTANCE-MS
+        plan-services:
+          path: /plans/**
+          serviceId: PLANDETAILSMICROSERVICE-2
+    host:
+      time-to-live: -1
+      connect-timeout-millis: 5000
+      max-per-route-connections: 10000
+      max-total-connections: 5000
+      socket-timeout-millis: 60000
+    semaphore:
+      max-semaphores: 500       

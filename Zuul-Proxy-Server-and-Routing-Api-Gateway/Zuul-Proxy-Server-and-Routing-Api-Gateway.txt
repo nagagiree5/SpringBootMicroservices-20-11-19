@@ -1,0 +1,7 @@
+10-12-19:-
+
+Zuul-Proxy-Server-and-Routing-Api-Gateway
+
+http://localhost:3333/customer/Microservices/viewProfle/9492011956
+http://localhost:3333/friends/Microservices/geRegisterPhoneNors/9492011956
+http://localhost:3333/plans/Microservices/getAllPlanDetails/all

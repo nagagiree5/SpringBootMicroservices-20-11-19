@@ -1,0 +1,345 @@
+>>25-11-2019:-
+
+
+
+ Note>> phoneNor in Customer table is Maching with phoneNor in Friends table 
+                                            also planid in Customer table is Maching with phoneNor in palndetails table...
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+SQL> select * from friends;
+
+        ID FRIEND_NOR  PHONE_NOR
+---------- ---------- ----------
+       111 9876543211 9492011956
+       222 1234567899 9492011956
+       333 9638527411 9492011956
+       444 8500874004 9494525638
+
+SQL> select * from plandetails;
+
+   PLAN_ID PLAN_NAME                 TENURE
+---------- ------------------------- -----------------------------------
+       111 Netflix-Basic             6-MONTHS
+       222 Netflix-Premium           1-YEAR
+       333 Amozon-Prime              3-MONTHS
+
+SQL> select * from customer;
+
+ PHONE_NOR        AGE NAME
+---------- ---------- -------------------------
+PASSWORD
+--------------------------------------------------------------------------------
+   PLAN_ID
+----------
+9492011956         21 NAGAGIRIGOLLAPALLI
+123456
+       111
+
+9494525638         48 SRINIVASULU
+123456
+       222
+
+ PHONE_NOR        AGE NAME
+---------- ---------- -------------------------
+PASSWORD
+--------------------------------------------------------------------------------
+   PLAN_ID
+----------
+
+SQL>
+
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+
+http://localhost:4004/Microservices/customer/register
+
+  {     
+        "phoneNor": 94920211956,
+        "name" :"SRINIVASULU".
+        "age": 48,
+        "password": "123456",
+        "planId":222
+       
+    }
+
+http://localhost:4004/Microservices/customer/login
+
+    {
+        "phoneNor": 9492011956,
+        "password": "123456"
+    }
+
+
+
+
+http://localhost:4004/Microservices/viewProfle/9492011956
+
+{
+    "phoneNor": 9492011956,
+    "name": "NAGAGIRIGOLLAPALLI",
+    "age": 21,
+    "planId": 111,
+    "currentPlan": {
+        "planId": 111,
+        "planName": "Netflix-Basic",
+        "tenure": "6-MONTHS"
+    },
+    "friends": [
+        9876543211,
+        1234567899,
+        9638527411
+    ]
+}
+
+
+
+
+
+
+
+
+>>29-11-2019:-
+
+Load balancing with ribbon:
+
+http://localhost:4004/Microservices/actuator/refresh    --POST
+[
+    "config.client.version",
+    "spring.jpa.show-sql"
+]
+
+
+http://localhost:4004/Microservices/viewProfle/9492011956
+
+Whitelabel Error Page
+This application has no explicit mapping for /error, so you are seeing this as a fallback.
+
+Fri Nov 29 13:10:10 IST 2019
+There was an unexpected error (type=Internal Server Error, status=500).
+I/O error on GET request for "http://custmicro/Microservices/geRegisterPhoneNors/9492011956": Connection refused: connect; nested exception is java.net.ConnectException: Connection refused: connect
+org.springframework.web.client.ResourceAccessException: I/O error on GET request for "http://custmicro/Microservices/geRegisterPhoneNors/9492011956": Connection refused: connect; nested exception is java.net.ConnectException: Connection refused: connect
+	at org.springframework.web.client.RestTemplate.doExecute(RestTemplate.java:751)
+	at org.springframework.web.client.RestTemplate.execute(RestTemplate.java:677)
+	at org.springframework.web.client.RestTemplate.exchange(RestTemplate.java:615)
+	at com.springboot.microservices.controller.CustomerController.getViewProfile(CustomerController.java:53)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+
+*Refresh or Reaload then get result.., becose one instanace is running that is isuue:
+http://localhost:4004/Microservices/viewProfle/9492011956
+
+{
+phoneNor: 9492011956,
+name: "NAGAGIRIGOLLAPALLI",
+age: 21,
+planId: 111,
+currentPlan: {
+planId: 111,
+planName: "Netflix-Basic",
+tenure: "6-MONTHS"
+},
+friends: [
+9876543211,
+1234567899,
+9638527411
+]
+}
+
+
+In Eclipse
+----------------------------------------------------------------------------------------
+>>Multiple Instances of project...
+
+Right click on  project
+        Run As->
+              Run configuration->
+                   [Main] tab
+                       Select Friend-Microservices
+                                [Environment] tab
+                                       server.port  |  9491   [Add  ] 
+
+
+
+
+
+-------------------------------------------------------------------------------------------
+
+
+
+
+=======================================================================================================================================================================
+***********************************************************************************************************************************************************************
+
+>>02-12-2019:-
+
+http://localhost:2222/eureka/apps
+http://saigiri:2222/
+Instances currently registered with Eureka
+
+Application	                AMIs	   Availability Zones	   Status
+
+CUSTOMER-MICROSERVICE-4  	n/a (1)	           (1)            UP (1) - SAIGIRI:Customer-Microservice-4:4004
+FRIENDINSTANCE-MS	        n/a (3)	           (3)	          UP (3) - SAIGIRI:FriendInstance-Ms:9492 ,SAIGIRI:FriendInstance-Ms:9493 , SAIGIRI:FriendInstance-Ms:9491
+PHONENORMICROSERVICE-1	        n/a (1)	           (1)	          UP (1) - SAIGIRI:PhoneNorMicroservice-1:4001
+PLANDETAILSMICROSERVICE-2	n/a (1)	           (1)	          UP (1) - SAIGIRI:PlanDetailsMicroservice-2:4002
+
+General Info
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+http://localhost:2222/eureka/apps
+
+<applications>
+<versions__delta>1</versions__delta>
+<apps__hashcode>UP_8_</apps__hashcode>
+<application>
+<name>PHONENORMICROSERVICE-1</name>
+<instance>...</instance>
+</application>
+<application>
+<name>PLANDETAILSMICROSERVICE-2</name>
+<instance>...</instance>
+</application>
+<application>
+<name>FRIENDINSTANCE-MS</name>
+<instance>...</instance>
+<instance>...</instance>
+<instance>...</instance>
+<instance>...</instance>
+<instance>...</instance>
+</application>
+<application>
+<name>CUSTOMER-MICROSERVICE-4</name>
+<instance>...</instance>
+</application>
+</applications>
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+FRIENDINSTANCE-MS
+PLANDETAILSMICROSERVICE-2
+=============================================================================================================================================================================
+DS Replicas
+
+localhost
+
+Instances currently registered with Eureka
+
+Application	AMIs	Availability Zones	Status
+
+CUSTOMER-MICROSERVICE-4	n/a (1)	(1)	UP (1) - SAIGIRI:Customer-Microservice-4:4004
+FRIENDINSTANCE-MS	n/a (3)	(3)	UP (3) - SAIGIRI:FriendInstance-Ms:9492 , SAIGIRI:FriendInstance-Ms:9493 , SAIGIRI:FriendInstance-Ms:9491
+PHONENORMICROSERVICE-1	n/a (1)	(1)	UP (1) - SAIGIRI:PhoneNorMicroservice-1:4001
+PLANDETAILSMICROSERVICE-2	n/a (1)	(1)	UP (1) - SAIGIRI:PlanDetailsMicroservice-2:4002
+
+General Info
+
+Name	Value
+total-avail-memory	321mb
+environment	test
+num-of-cpus	4
+current-memory-usage	71mb (22%)
+server-uptime	00:11
+registered-replicas	http://localhost:2222/eureka/
+unavailable-replicas	http://localhost:2222/eureka/,
+available-replicas
+	
+Instance Info
+
+Name	Value
+ipAddr	192.168.1.114
+status	UP
+================================================================================================================================================================================
+
+Note:Eureka Server takes around 10 minutes to update the service-urls since refreshed
+
+
+
+
+	static String FRIEND_URL="http://FRIENDINSTANCE-MS/Microservices/geRegisterPhoneNors/{phoneNor}";
+	static String PLAN_URL="http://PLANDETAILSMICROSERVICE-2/Microservices/getSpecificPlan/{planId}";
+
+        //RestTemplate restTemplate2=new RestTemplate();
+		PlanDetailsDto planDetailsDto=restTemplate.getForObject(PLAN_URL, PlanDetailsDto.class,phoneId);
+
+
+# Application config
+management.endpoints.web.exposure.include=*
+server.servlet.context-path=/Microservices1
+
+# Ribbon config
+#custmicro.ribbon.eureka.enabled=false 
+#custmicro.ribbon.listOfServers=http://localhost:9491,http://localhost:9492,http://localhost:9493
+#custmicro.ribbon.ServerListRefreshInterval=5000
+
+# Eureka client config
+eureka.client.service-url.defaultZone= http://localhost:2222/eureka
+spring.application.name=Customer-Microservice-4
+
+
+
+
+=======================================================================================================================================================================
+10-12-19:-
+
+Zuul-Proxy-Server-and-Routing-Api-Gateway
+
+http://localhost:3333/customer/Microservices/viewProfle/9492011956
+http://localhost:3333/friends/Microservices/geRegisterPhoneNors/9492011956
+http://localhost:3333/plans/Microservices/getAllPlanDetails/all
+
+
+
+Synchronous:-
+============
+http://localhost:3333/customer/Microservices/viewProfle/9492011956
+
+Hibernate: select customer0_.phone_nor as phone_nor1_0_0_, customer0_.age as age2_0_0_, customer0_.name as name3_0_0_, customer0_.password as password4_0_0_, customer0_.plan_id as plan_id5_0_0_ from customer customer0_ where customer0_.phone_nor=?
+getFriends()
+Time taken in ms... : 367
+Hibernate: select customer0_.phone_nor as phone_nor1_0_0_, customer0_.age as age2_0_0_, customer0_.name as name3_0_0_, customer0_.password as password4_0_0_, customer0_.plan_id as plan_id5_0_0_ from customer customer0_ where customer0_.phone_nor=?
+getFriends()
+Time taken in ms... : 36
+2019-12-12 02:34:40.947  INFO [Customer-Microservice-4,,,] 49984 --- [trap-executor-0] c.n.d.s.r.aws.ConfigClusterResolver      : Resolving eureka endpoints via configuration
+Hibernate: select customer0_.phone_nor as phone_nor1_0_0_, customer0_.age as age2_0_0_, customer0_.name as name3_0_0_, customer0_.password as password4_0_0_, customer0_.plan_id as plan_id5_0_0_ from customer customer0_ where customer0_.phone_nor=?
+getFriends()
+Time taken in ms... : 35
+
+
+Asynchronous:-
+============
+Hibernate: select customer0_.phone_nor as phone_nor1_0_0_, customer0_.age as age2_0_0_, customer0_.name as name3_0_0_, customer0_.password as password4_0_0_, customer0_.plan_id as plan_id5_0_0_ from customer customer0_ where customer0_.phone_nor=?
+getFriends()
+Time taken in ms... : 35
+Hibernate: select customer0_.phone_nor as phone_nor1_0_0_, customer0_.age as age2_0_0_, customer0_.name as name3_0_0_, customer0_.password as password4_0_0_, customer0_.plan_id as plan_id5_0_0_ from customer customer0_ where customer0_.phone_nor=?
+getFriends()
+Time taken in ms... : 27
+Hibernate: select customer0_.phone_nor as phone_nor1_0_0_, customer0_.age as age2_0_0_, customer0_.name as name3_0_0_, customer0_.password as password4_0_0_, customer0_.plan_id as plan_id5_0_0_ from customer customer0_ where customer0_.phone_nor=?
+getFriends()
+Time taken in ms... : 43
+Hibernate: select customer0_.phone_nor as phone_nor1_0_0_, customer0_.age as age2_0_0_, customer0_.name as name3_0_0_, customer0_.password as password4_0_0_, customer0_.plan_id as plan_id5_0_0_ from customer customer0_ where customer0_.phone_nor=?
+getFriends()
+Time taken in ms... : 32
+Hibernate: select customer0_.phone_nor as phone_nor1_0_0_, customer0_.age as age2_0_0_, customer0_.name as name3_0_0_, customer0_.password as password4_0_0_, customer0_.plan_id as plan_id5_0_0_ from customer customer0_ where customer0_.phone_nor=?
+getFriends()
+Time taken in ms... : 32
+Hibernate: select customer0_.phone_nor as phone_nor1_0_0_, customer0_.age as age2_0_0_, customer0_.name as name3_0_0_, customer0_.password as password4_0_0_, customer0_.plan_id as plan_id5_0_0_ from customer customer0_ where customer0_.phone_nor=?
+getFriends()
+Time taken in ms... : 28
+Hibernate: select customer0_.phone_nor as phone_nor1_0_0_, customer0_.age as age2_0_0_, customer0_.name as name3_0_0_, customer0_.password as password4_0_0_, customer0_.plan_id as plan_id5_0_0_ from customer customer0_ where customer0_.phone_nor=?
+getFriends()
+Time taken in ms... : 26
+
+http://localhost:3333/customer/Microservices/viewProfle/9492011956
+
+
+
+
+
+
+
+
